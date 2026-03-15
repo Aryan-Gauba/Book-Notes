@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= heading %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1><%= heading %></h1>
+    
+    <form action="<%= book.id ? '/edit/' + book.id : '/add' %>" method="POST" class="book-form">
+      
+      <% if (!book.id) { %>
+        <div class="form-group">
+          <label for="isbn">ISBN-13</label>
+          <input type="text" id="isbn" name="isbn" placeholder="e.g., 9780593419052" required>
+          <small>The Title and Author will be fetched automatically.</small>
+        </div>
+      <% } else { %>
+        <div class="edit-info">
+          <p><strong>Editing:</strong> <%= book.title %></p>
+          <input type="hidden" name="isbn" value="<%= book.isbn %>">
+        </div>
+      <% } %>
+
+      <div class="form-group">
+        <label for="rating">Rating (1-10)</label>
+        <input type="number" id="rating" name="rating" min="1" max="10" value="<%= book.rating || 5 %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Your Notes</label>
+        <textarea id="notes" name="notes" rows="8" placeholder="What were the most salient parts of this book?" required><%= book.notes || '' %></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <%= book.id ? 'Save Changes' : 'Fetch & Save Book' %>
+        </button>
+        <a href="/" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

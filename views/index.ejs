@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Book Notes</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Personal Library & Notes</h1>
+      <nav>
+        <a href="/add" class="btn btn-primary">Add New Book</a>
+        <div class="sort-options">
+          Sort by: 
+          <a href="/?sort=rating" class="<%= currentSort === 'rating' ? 'active' : '' %>">Rating</a> | 
+          <a href="/?sort=recency" class="<%= currentSort === 'recency' ? 'active' : '' %>">Recency</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <% if (books.length === 0) { %>
+        <p>Your library is empty. Click "Add New Book" to get started!</p>
+      <% } %>
+
+      <% books.forEach(book => { %>
+        <div class="book-card">
+          <div class="book-cover">
+            <img 
+              src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-L.jpg?default=false" 
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/150x200?text=No+Cover+Found';" 
+              alt="<%= book.title %> cover">
+          </div>
+          <div class="book-info">
+            <h2><%= book.title %></h2>
+            <p class="author">By <%= book.author %></p>
+            <p class="rating">Rating: <strong><%= book.rating %>/10</strong></p>
+            <p class="date">Read on: <%= new Date(book.date_read).toLocaleDateString() %></p>
+            <div class="notes">
+              <p><%= book.notes %></p>
+            </div>
+            <div class="actions">
+              <a href="/edit/<%= book.id %>" class="edit-link">Edit</a>
+              <form action="/delete/<%= book.id %>" method="POST" style="display:inline;">
+                <button type="submit" class="delete-btn" onclick="return confirm('Delete this book?')">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </main>
+  </div> </body>
+</html>

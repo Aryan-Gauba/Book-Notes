@@ -33,7 +33,13 @@ const dbConfigs = isProduction
       port: process.env.DB_PORT,
     };
 
-const db = new pg.Pool(dbConfigs);
+//const db = new pg.Pool(dbConfigs);
+const db = new pg.Pool({
+  connectionString: process.env.POSTGRES_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));

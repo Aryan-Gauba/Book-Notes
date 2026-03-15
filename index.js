@@ -3,23 +3,22 @@ import bodyParser from "body-parser";
 import pg from "pg";
 import axios from "axios";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
+// 1. Initialize app FIRST
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Database Connection
-// const db = new pg.Pool({
-//   user: process.env.DB_USER,
-//   host: process.env.DB_HOST,
-//   database: process.env.DB_DATABASE,
-//   password: process.env.DB_PASSWORD,
-//   port: process.env.DB_PORT,
-// });
+// 2. Setup paths for EJS
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Database Connection Logic
-// Database Connection Logic
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
 // Database Connection Logic
 const isProduction = process.env.NODE_ENV === "production";
 

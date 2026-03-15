@@ -10,13 +10,30 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Database Connection
-const db = new pg.Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+// const db = new pg.Pool({
+//   user: process.env.DB_USER,
+//   host: process.env.DB_HOST,
+//   database: process.env.DB_DATABASE,
+//   password: process.env.DB_PASSWORD,
+//   port: process.env.DB_PORT,
+// });
+
+// Database Connection Logic
+const isProduction = process.env.NODE_ENV === "production";
+
+const dbConfigs = isProduction 
+  ? {
+      connectionString: process.env.POSTGRES_URL + "?sslmode=require",
+    }
+  : {
+      user: process.env.DB_USER,
+      host: process.env.DB_HOST,
+      database: process.env.DB_DATABASE,
+      password: process.env.DB_PASSWORD,
+      port: process.env.DB_PORT,
+    };
+
+const db = new pg.Pool(dbConfigs);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));

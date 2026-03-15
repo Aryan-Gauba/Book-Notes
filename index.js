@@ -20,11 +20,16 @@ const port = process.env.PORT || 3000;
 
 // Database Connection Logic
 // Database Connection Logic
+// Database Connection Logic
 const isProduction = process.env.NODE_ENV === "production";
 
 const db = new pg.Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: true // Simpler SSL flag often works better on Vercel
+  // This uses the Vercel URL in production, or your .env variables locally
+  connectionString: isProduction 
+    ? process.env.POSTGRES_URL 
+    : `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`,
+  // SSL is required for Vercel/Neon but should be off for local dev
+  ssl: isProduction ? { rejectUnauthorized: false } : false
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));

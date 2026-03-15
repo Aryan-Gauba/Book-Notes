@@ -19,26 +19,12 @@ const port = process.env.PORT || 3000;
 // });
 
 // Database Connection Logic
+// Database Connection Logic
 const isProduction = process.env.NODE_ENV === "production";
 
-const dbConfigs = isProduction 
-  ? {
-      connectionString: process.env.POSTGRES_URL + "?sslmode=require",
-    }
-  : {
-      user: process.env.DB_USER,
-      host: process.env.DB_HOST,
-      database: process.env.DB_DATABASE,
-      password: process.env.DB_PASSWORD,
-      port: process.env.DB_PORT,
-    };
-
-//const db = new pg.Pool(dbConfigs);
 const db = new pg.Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: isProduction ? process.env.POSTGRES_URL : `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`,
+  ssl: isProduction ? { rejectUnauthorized: false } : false
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));

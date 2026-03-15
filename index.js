@@ -23,8 +23,8 @@ const port = process.env.PORT || 3000;
 const isProduction = process.env.NODE_ENV === "production";
 
 const db = new pg.Pool({
-  connectionString: isProduction ? process.env.POSTGRES_URL : `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`,
-  ssl: isProduction ? { rejectUnauthorized: false } : false
+  connectionString: process.env.POSTGRES_URL,
+  ssl: true // Simpler SSL flag often works better on Vercel
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
